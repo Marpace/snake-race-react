@@ -1,0 +1,20 @@
+.home-main {
+    .header{
+        margin-bottom: 50px;
+    }
+    .lobby-btn {
+        margin-bottom: 30px;
+    }
+    .nickname-container {
+        @include flex_centered(column);
+        flex-wrap: nowrap;
+        opacity: 0;
+        height: 0;
+        transition: 300ms;
+        margin-bottom: 50px;
+    }
+    .input-visible {
+        height: 150px;
+        opacity: 1;
+    }
+}

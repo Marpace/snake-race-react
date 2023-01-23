@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+    -webkit-tap-highlight-color:transparent;
+}
+body {
+    min-height: 100vh;
+    background-color: $dark_green
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
+.show-flex {
+    display: flex !important;
+}
+
+.invisible {
+    opacity: 0 !important;
+}
+
+.visible {
+    opacity: 1 !important;
+}
