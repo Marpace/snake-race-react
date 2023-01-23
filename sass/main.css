@@ -914,6 +914,11 @@ main {
   height: 150px;
   opacity: 1;
 }
+.home-main .nickname-message {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: #B4DE3E;
+}
 
 #multiplayer {
   display: flex;
@@ -1031,7 +1036,7 @@ main {
   font-family: "Bungee Shade", sans-serif;
   color: #B4DE3E;
   text-align: center;
-  width: 100%;
+  width: 80%;
 }
 #game-screen .grid-container #game-message {
   font-size: 3rem;
