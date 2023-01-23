@@ -42,7 +42,6 @@ function MultiplayerSettings(props) {
     }
     
     function startGame() {
-        console.log(props.playerNumber)
         setPlayerOneFoodCount(0);
         setPlayerTwoFoodCount(0);
         const data = {
@@ -79,7 +78,6 @@ function MultiplayerSettings(props) {
     }
 
     function handleUpdateStats(winner) {
-        console.log(winner)
         winner == props.playerNumber 
         ? setWins(prev => prev + 1)
         : setLosses(prev => prev + 1)

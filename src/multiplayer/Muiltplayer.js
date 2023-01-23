@@ -13,7 +13,7 @@ function Multiplayer(props) {
   const [gameCode, setGameCode] = useState("");
   const [gameType, setGameType] = useState("Classic");
   const [modalVisible, setModalVisible] = useState(false);
-  const [roomDeleted, setRoomDeleted] = useState(false);
+  const [counter, setCounter] = useState(3);
   
   const socket = useContext(SocketContext);
 
@@ -31,7 +31,8 @@ function Multiplayer(props) {
   function startGame(data) {
     data = {...data, gameCode: gameCode}
     socket.emit("startGame", data);
-    socket.emit("clearGameMessage");
+    // socket.emit("clearGameMessage");
+    socket.emit("countdown", gameCode)
   }
 
   function detectKeydown(e) {
@@ -45,12 +46,22 @@ function Multiplayer(props) {
     }
   }
 
+  // function startCounter() {
+  //   setTimeout(() => {
+  //     setCounter(prev => prev - 1);
+  //     console.log(counter)
+  //     if(counter >= 2) startCounter();
+  //   }, 1000)
+  // } 
+
   socket.on("setPlayerNames", handleSetPlayerNames);
   socket.on("gameCode", handleGameCode);
   socket.on("gameOver", handleGameOver);
   socket.on("notEnoughPlayers", handleNotEnoughPlayers);
   socket.on("updateGameMessage", handleUpdateGameMessage);
   socket.on("playerOneLeft", handlePlayerOneLeft);
+  socket.on("updateCounter", handleUpdateCounter);
+  socket.on("clearGameMessage", handleClearGameMessage);
   
   function handleSetPlayerNames(data) {
     props.setPlayerOneName(data.playerOneName)
@@ -82,6 +93,15 @@ function Multiplayer(props) {
     setGameCode(code)
     socket.emit("switchPlayer", props.nickname);
   }
+
+  function handleUpdateCounter(count) {
+    setGameMessage(`Game starting in ${count}`)
+  }
+
+  function handleClearGameMessage() {
+    setGameMessage("");
+  }
+
 
   return (
     <main>
@@ -132,7 +152,6 @@ function Multiplayer(props) {
           <button id="mobile-play-again-btn" className="lobby-btn">Play again</button>
   
           <Modal 
-            roomDeleted={roomDeleted}
             modalVisible={modalVisible}
             setModalVisible={setModalVisible}
             setGameMode={props.setGameMode}

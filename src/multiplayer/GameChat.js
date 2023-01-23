@@ -34,6 +34,11 @@ function GameChat(props) {
     })
   }
 
+  function handleButtonClick() {
+    if(chatButtonContent === "Send") sendMessage("text");
+    if(chatButtonContent === "Search") fetchGifs();
+  }
+
   function handleGifSearchInputChange(e) {
     setGifSearchValue(e.target.value);
   }
@@ -127,7 +132,7 @@ function GameChat(props) {
         <button onClick={handleGifButton} className="gif-icon">GIF</button>
         <input onChange={handleGifSearchInputChange} value={gifSearchValue} type="text" className={`gif-search-input ${gifSearch ? "show" : "hidden"}`} placeholder="Search gifs"></input>
         <input onChange={handleMessageInputChange} value={message} className={`compose-message ${gifSearch ? "hidden" : "show"}`} type="text" placeholder="Send message..." autoComplete="off"></input>
-        <button id="send-message-btn" className="lobby-btn">{chatButtonContent}</button>
+        <button onClick={handleButtonClick} id="send-message-btn" className="lobby-btn">{chatButtonContent}</button>
         <button id="mobile-send-message-btn">
             <img src="icons/send_icon.png" alt=""></img>
         </button>
