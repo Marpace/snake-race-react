@@ -33,6 +33,8 @@
             width: 100%;
             height: 100%;
             position: relative;
+            gap: 50px;
+            padding: 20px 25px;
         }
     
         p, span {
@@ -91,6 +93,12 @@
                 }
             }
         }
+        .speed-setting-img {
+            width: 10px;
+            height: 100%;
+            cursor: pointer;
+            object-fit: contain;
+        }
         #current-players {
             .awaiting-player {
                 background-color: #a7a7a7;
@@ -105,11 +113,10 @@
                 position: relative;
                 cursor: pointer;
                 text-align: center;
-                &:hover #game-type-dropdown__content {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 20px;
-                }
+                display: flex;
+                gap: 2px;
+                flex-wrap: nowrap;
+                
 
                 .dropdown-arrow-down {
                     position: absolute;
@@ -118,23 +125,17 @@
                     font-size: 1.6rem;
                     color: $light_green;
                     @include responsive($tablet_large) {
-                        display: none;
+                        right: 50px;
                     }
                 }
                 &__content {
                     display: none;
                     position: absolute;
                     background-color: $very_dark_green;
+                    border: 1px solid $light_green;
                     width: 100%;
                     padding: 10px;
                     z-index: 1;
-                    @include responsive($tablet_large) {
-                        @include flex_centered(column);
-                        align-items: flex-start;
-                        gap: 15px;
-                        margin-top: 5px;
-                        position: relative;
-                    }
 
                     .game-type__option {
                         color: $light_green;
@@ -165,6 +166,12 @@
                         }
                     }
                 }
+                .dropdown-open {
+                    top:30px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                }
             }
             .dropdown-disabled {
                 pointer-events: none;
@@ -174,9 +181,9 @@
                 background-color: $light_green;
                 padding: 5px 10px;
                 text-align: center;
-                @include responsive($tablet_large) {
-                    display: none;
-                }
+                // @include responsive($tablet_large) {
+                //     display: none;
+                // }
             }
         }
         .color-picker {
@@ -301,14 +308,19 @@
         }
     }
     #game-aside__buttons {
-        #start-game-btn {
+        .start-game-btn {
             @include responsive($tablet_large) {
                 display: none;
             }
         }
-        #play-again-btn {
-            display: none;
-        }
     }
 }
-
+.settings-visible {
+    width:50%;
+    left:0;
+    gap: 50px;
+    @include responsive($mobile){
+        width: 100%;
+        gap: 10px;
+    }
+}

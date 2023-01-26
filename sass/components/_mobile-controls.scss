@@ -22,25 +22,34 @@
             height: 100%;
             width: 70px;
         }
-        #mobile-controls__up {
+        .mobile-controls__up {
             top: 0;
             left: 50%;
             transform: translateX(-50%);
         }
-        #mobile-controls__down {
+        .mobile-controls__down {
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
+            img {
+                transform: rotate(180deg);
+            }
         }
-        #mobile-controls__left {
+        .mobile-controls__left {
             left: 0;
             top: 50%;
             transform: translateY(-50%);
+            img {
+                transform: rotate(-90deg);
+            }
         }
-        #mobile-controls__right {
+        .mobile-controls__right {
             right: 0;
             top: 50%;
             transform: translateY(-50%);
+            img {
+                transform: rotate(90deg);
+            }
         }
     }
 }
