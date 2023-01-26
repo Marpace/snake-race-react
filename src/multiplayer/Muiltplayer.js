@@ -13,7 +13,13 @@ function Multiplayer(props) {
   const [gameCode, setGameCode] = useState("");
   const [gameType, setGameType] = useState("Classic");
   const [modalVisible, setModalVisible] = useState(false);
-  const [counter, setCounter] = useState(3);
+  const [settingsVisible, setSettingsVisible] = useState(false);
+  const [chatVisible, setChatVisible] = useState(false);
+  const [goalValue, setGoalValue] = useState(10);
+  const [speedValue, setSpeedValue] = useState(5);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [notification, setNotification] = useState(false);
   
   const socket = useContext(SocketContext);
 
@@ -28,11 +34,14 @@ function Multiplayer(props) {
     setModalVisible(true);
   }
 
-  function startGame(data) {
-    data = {...data, gameCode: gameCode}
+  function startGame() {
+    const data = {
+      goal: goalValue,
+      speed: speedValue,
+      gameType: gameType,
+      gameCode: gameCode
+    }
     socket.emit("startGame", data);
-    // socket.emit("clearGameMessage");
-    socket.emit("countdown", gameCode)
   }
 
   function detectKeydown(e) {
@@ -46,13 +55,20 @@ function Multiplayer(props) {
     }
   }
 
-  // function startCounter() {
-  //   setTimeout(() => {
-  //     setCounter(prev => prev - 1);
-  //     console.log(counter)
-  //     if(counter >= 2) startCounter();
-  //   }, 1000)
-  // } 
+  function detectMobileClick(e) {
+    const keyCode = Number(e.target.id)
+    socket.emit("keydown", keyCode)
+}
+
+
+  function showSettings() {
+    setSettingsVisible(true);
+  }
+
+  function showChat() {
+    setChatVisible(true)
+  }
+
 
   socket.on("setPlayerNames", handleSetPlayerNames);
   socket.on("gameCode", handleGameCode);
@@ -62,6 +78,7 @@ function Multiplayer(props) {
   socket.on("playerOneLeft", handlePlayerOneLeft);
   socket.on("updateCounter", handleUpdateCounter);
   socket.on("clearGameMessage", handleClearGameMessage);
+  socket.on("postAlert", handlePostAlert)
   
   function handleSetPlayerNames(data) {
     props.setPlayerOneName(data.playerOneName)
@@ -95,6 +112,7 @@ function Multiplayer(props) {
   }
 
   function handleUpdateCounter(count) {
+    console.log("received ")
     setGameMessage(`Game starting in ${count}`)
   }
 
@@ -102,11 +120,27 @@ function Multiplayer(props) {
     setGameMessage("");
   }
 
+  function handlePostAlert(message) {
+    console.log("alert")
+    setAlertMessage(message)
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false)
+    }, 3000);
+  }
+
+  useEffect(() => {
+    document.addEventListener("click", detectMobileClick)
+  }, [])
+
 
   return (
-    <main>
+    <main className="multiplayer-main">
+      <div className={`alert ${showAlert ? "show-message" : ""}`}>
+        <p className={"alert__message"}>{alertMessage}</p>
+      </div>
       <div className="header-container multiplayer-header-container">
-      <button onClick={handleBackButton} className="lobby-btn">Back</button>
+      <button onClick={handleBackButton} className="lobby-btn back-btn">Back</button>
         <h1 className="header">Snake Race</h1>
       </div>
   
@@ -116,40 +150,45 @@ function Multiplayer(props) {
             playerTwoName={props.playerTwoName}
             playerNumber={props.playerNumber}
             gameType={gameType}
+            settingsVisible={settingsVisible}
+            goalValue={goalValue}
+            speedValue={speedValue}
+            setSettingsVisible={setSettingsVisible}
             startGame={startGame}
             setGameType={setGameType}
+            setGoalValue={setGoalValue}
+            setSpeedValue={setSpeedValue}
           />
           <div className="grid-container">
-              {/* <Countdown
-                count={count}
-              /> */}
-              {/* <h1 id="countdown">{}</h1> */}
               <h1 id="game-message">{gameMessage}</h1>
               <CanvasMultiplayer 
                 gameState={props.gameState}
               />
               <div id="game-code-div">
-                  <div className="settings-icon"></div>
-                  <p id="your-game-code" className={`text-info ${props.playerNumber == 2 ? "hidden" : ""}`}>{`Game code: ${gameCode}`}</p>
-                  <div className="game-rules-container">
-                    <p className="game-rules-hoverable">Game rules</p>
-                    <div className="game-rules">
-                      <p className="game-rules__title">{gameType}</p>
-                      <p className="game-rules__description">{descriptions[gameType]}</p>
-                    </div>
+                <div onClick={showSettings} className="settings-icon"></div>
+                <p id="your-game-code" className={`text-info ${props.playerNumber == 2 ? "hidden" : ""}`}>{`Game code: ${gameCode}`}</p>
+                <div className="game-rules-container">
+                  <p className="game-rules-hoverable">Game rules</p>
+                  <div className="game-rules">
+                    <p className="game-rules__title">{gameType}</p>
+                    <p className="game-rules__description">{descriptions[gameType]}</p>
                   </div>
-                  <p className="text-info">controls: ← ↑ → ↓</p>
+                </div>
+                <p className="text-info controls-info">controls: ← ↑ → ↓</p>
+                <div onClick={showChat} className={`chat-icon ${notification ? "notification" : ""}`}></div>
               </div>
           </div>
           <GameChat 
             playerNumber={props.playerNumber}
+            chatVisible={chatVisible}
+            setChatVisible={setChatVisible}
+            setNotification={setNotification}
           />
   
           <MobileControls/>
   
           {/* Only visible on screens 992 or smaller */}
-          <button id="mobile-start-game-btn" className="lobby-btn">Start game</button>
-          <button id="mobile-play-again-btn" className="lobby-btn">Play again</button>
+          <button onClick={startGame} className="mobile-start-game-btn lobby-btn">Start game</button>
   
           <Modal 
             modalVisible={modalVisible}

@@ -1,8 +1,30 @@
-.header-container {
+.header-container, .multiplayer-header-container {
     display: flex;
     gap: 70px;
     width: 860px;
     margin: 50px 0 15px 0;
+
+    @include responsive($tablet_large) {
+        width: 100%;
+        justify-content: center;
+
+        .back-btn {
+            position: absolute;
+            bottom: 20px;
+            z-index: 100;
+            width: 90%;
+        }
+        .header {
+            font-size: 3rem;
+            height: 50px;
+            margin: 0;
+        }
+    }
+    @include responsive($mobile) {
+        .header {
+            font-size: 2rem;
+        }
+    }
 }
 .multiplayer-header-container {
     width: 1190px;
@@ -17,9 +39,10 @@
     text-align: center;
 
     @include responsive($tablet_large) {
+        height: 150px;
         font-size: 3.5rem;
         line-height: 1.5;
-        margin-top: 20px;
+        margin-top: 60px;
     }
 }
 

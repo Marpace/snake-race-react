@@ -15,8 +15,6 @@ const Canvas = props => {
   let singlePlayerFoodCount = 0;
   // let allYouCanEatSeconds = 60;
   let isTurning = false;
-  let gamesPlayed = 0;
-  let mobile = window.screen.width < 993 ? true : false
 
   let FRAME_RATE = 5;
   
@@ -220,7 +218,7 @@ const Canvas = props => {
     switch(e.keyCode){
         case 37: case 39: case 38:  case 40: 
             e.preventDefault(); 
-            const vel = getSinglePlayerUpdatedVelocity(e.keyCode, gameState);
+            const vel = getUpdatedVelocity(e.keyCode, gameState);
             if(vel !== undefined) gameState.player.vel = vel;
         break; 
         default: break; 
@@ -229,7 +227,7 @@ const Canvas = props => {
 
   // changes direction in which the snake is moving based on keyCode and current game state
   //called in the "detectKeydown" function above 
-  function getSinglePlayerUpdatedVelocity(keyCode, state) {
+  function getUpdatedVelocity(keyCode, state) {
     switch (keyCode) {
         case 37: { // left
             if(state.player.vel.x === 1 ){
@@ -280,8 +278,13 @@ function handleGameOver() {
 };
 
 
+function detectMobileClick(e) {
+    const vel = getUpdatedVelocity(Number(e.target.id), gameState);
+    if(vel !== undefined) gameState.player.vel = vel;
+}
+
 useEffect(() => {
-    const canvas = canvasRef.current
+    const canvas = canvasRef.current 
     const context = canvas.getContext('2d')
     const canvasSize = parseInt(getComputedStyle(canvas).width.replace(/[px]/g, ""))
     
@@ -363,6 +366,7 @@ useEffect(() => {
 
     if(props.gameInProgress) {
       document.addEventListener('keydown', detectKeydown);
+      document.addEventListener('click', detectMobileClick);
       if(props.gameType === "Pedal to the metal"){
         startSinglePlayerGameTimeout(gameState);
       } else {

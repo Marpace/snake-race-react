@@ -6,23 +6,33 @@ function MultiplayerSettings(props) {
 
     const socket = useContext(SocketContext);
 
-    const [goalInput, setGoalInput] = useState(10);
-    const [speedInput, setSpeedInput] = useState(5);
     const [snakeColor, setSnakeColor] = useState("");
     const [playerOneFoodCount, setPlayerOneFoodCount] = useState(0)
     const [playerTwoFoodCount, setPlayerTwoFoodCount] = useState(0)
     const [wins, setWins] = useState(0);
     const [losses, setLosses] = useState(0);
+    const [dropdownVisible, setDropdownVisible] = useState(false);
 
 
-    function handleGoalInputChange(e) {
-        setGoalInput(e.target.value)
-        socket.emit("goalInputChange", e.target.value)
+
+    function increaseSettingValue(e) {
+        const setting = e.target.id
+        if(setting === "goal") props.setGoalValue(prev => prev + 1);
+        if(setting === "speed") props.setSpeedValue(prev => prev + 1);
     }
 
-    function handleSpeedInputChange(e) {
-        setSpeedInput(e.target.value);
-        socket.emit("speedInputChange", e.target.value)
+    function decreaseSettingValue(e) {
+        const setting = e.target.id
+        if(setting === "goal"){
+            props.setGoalValue(prev =>{
+                return prev <= 1 ? 1 : prev - 1;
+            });
+        } 
+        if(setting === "speed"){
+            props.setSpeedValue(prev =>{
+                return prev <= 1 ? 1 : prev - 1;
+            });
+        } 
     }
 
     function updateGameType(e) {
@@ -40,31 +50,35 @@ function MultiplayerSettings(props) {
         }
         socket.emit("updateSnakeColor", data)
     }
+
+    function hideSettings() {
+        props.setSettingsVisible(false)
+    }
     
-    function startGame() {
-        setPlayerOneFoodCount(0);
-        setPlayerTwoFoodCount(0);
-        const data = {
-            goal: goalInput,
-            speed: speedInput,
-            gameType: props.gameType
-        }
-        props.startGame(data);
+    function toggleDropdown(){
+        setDropdownVisible(prev => {
+            return prev ? false : true;
+        })
     }
 
 
+    function startGame() {
+        setPlayerOneFoodCount(0);
+        setPlayerTwoFoodCount(0);
+        props.startGame();
+    }
 
     function handleUpdateGoal(value) {
-        if(props.playerNumber == 2) {
+        if(props.playerNumber === 2) {
             console.log("goal updated")
-            setGoalInput(value)
+            props.setGoalValue(value)
         }
     }
 
     function handleUpdateSpeed(value) {
-        if(props.playerNumber == 2) {
+        if(props.playerNumber === 2) {
             console.log("speed updated")
-            setSpeedInput(value)
+            props.setSpeedValue(value)    
         }
     }
 
@@ -96,12 +110,11 @@ function MultiplayerSettings(props) {
     }, [props.playerNumber])
 
   return (
-    <aside id="game-settings" className="game-aside">
+    <aside id="game-settings" className={`game-aside ${props.settingsVisible ? "settings-visible" : ""}`}>
     <div className="game-info">
         <div id="current-players" className="game-info__section">
             <div className="back-arrow-container">
                 <span className="game-info__section-title">Players</span>
-                <span className="back-arrow">←</span>
             </div>
             <div className="section__item">
                 <p id="player-1">{props.playerOneName}</p>
@@ -116,23 +129,15 @@ function MultiplayerSettings(props) {
             <p className="game-info__section-title">Settings</p>
             <div id="goal-setting" className={`section__item ${props.playerNumber == 2 ? "player-2-settings" : ""}`}>
                 <p>Goal</p>
-                <input 
-                    onChange={handleGoalInputChange} 
-                    id="goal-input" 
-                    type="number" 
-                    min="3" 
-                    max="100"
-                    value={goalInput}></input>
+                <img onClick={decreaseSettingValue} id="goal" className="speed-setting-img" src="icons/minus_icon.png"></img>
+                <span>{props.goalValue}</span>
+                <img onClick={increaseSettingValue} id="goal" className="speed-setting-img" src="icons/plus_icon.png"></img>
             </div>
             <div id="speed-setting" className={`section__item ${props.playerNumber == 2 ? "player-2-settings" : ""}`}>
                 <p>Speed</p>
-                <input 
-                    onChange={handleSpeedInputChange} 
-                    id="speed-input" 
-                    type="number" 
-                    min="1" 
-                    max="20"
-                    value={speedInput}></input>
+                <img onClick={decreaseSettingValue} id="speed" className="speed-setting-img" src="icons/minus_icon.png"></img>
+                <span>{props.speedValue}</span>
+                <img onClick={increaseSettingValue} id="speed" className="speed-setting-img" src="icons/plus_icon.png"></img>
             </div>
         </div>
         <div id="game-stats-multiplayer" className="game-info__section">
@@ -146,11 +151,11 @@ function MultiplayerSettings(props) {
                 <span id="losses">{losses}</span>
             </div>
         </div>
-        <div id="game-type" className="game-info__section">
+        <div onClick={toggleDropdown} id="game-type" className="game-info__section">
             <div id="game-type-dropdown" className={props.playerNumber == 2 ? "dropdown-disabled" : ""}>
                 <span id="game-type-dropdown__title" className="game-info__section-title">{`${props.playerNumber == 2 ? "Game type" : "Choose game type "}`}</span>
                 <span className={`dropdown-arrow-down ${props.playerNumber == 2 ? "hidden" : ""}`}>▾</span>
-                <div id="game-type-dropdown__content">
+                <div id="game-type-dropdown__content" className={`${dropdownVisible ? "dropdown-open" : "hidden"}`}>
                 <p 
                       onClick={updateGameType} 
                       className={`game-type__option ${props.gameType === "Classic" ? "option-active" : ""}`}>
@@ -169,7 +174,6 @@ function MultiplayerSettings(props) {
                       All you can eat</p>
                 </div>
             </div>
-            {/* <h1 id="game-type-header" className="game-info__section-title">Game type</h1> */}
             <p className="current-game-type">{props.gameType}</p>
         </div>
         <div className="color-picker game-info__section"> 
@@ -193,9 +197,10 @@ function MultiplayerSettings(props) {
                 </div>
             </div>
         </div>
+        <span onClick={hideSettings} className="back-arrow">←</span>
     </div>
     <div id="game-aside__buttons">
-        <button onClick={startGame} id="start-game-btn" className={`lobby-btn ${props.playerNumber == 2 ? "button-disabled" : ""}`}>Start Game</button>
+        <button onClick={startGame} className={`lobby-btn start-game-btn ${props.playerNumber == 2 ? "button-disabled" : ""}`}>Start Game</button>
     </div>
 </aside>
   )

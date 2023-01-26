@@ -57,14 +57,7 @@ function MultiplayerLobby(props) {
   socket.on("unknownCode", handleUnknownCode);
   socket.on("roomIsFull", handleRoomIsFull);
   socket.on("joinGame", handleJoinGame);
-  
-  useEffect(() => {
 
-
-
-  }, [])
-
-  
   return (
     <main className="home-main">
       <h1 className="header">Snake Race</h1>

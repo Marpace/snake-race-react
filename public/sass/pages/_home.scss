@@ -1,4 +1,7 @@
 .home-main {
+    @include responsive($tablet_large) {
+        gap: 10px;
+    }
     .header{
         margin-bottom: 50px;
     }

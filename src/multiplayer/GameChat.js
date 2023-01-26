@@ -7,7 +7,8 @@ import GifImage from "./GifImage";
 
 function GameChat(props) {
 
-  
+  console.log(props.chatVisible)
+
   const GIPHY_API_KEY = "XZ1XB9l5SzJmOWNCfvS7TiNhAz3fbG0q";
   const socket = useContext(SocketContext);
   const chatRef = useRef(null);
@@ -39,8 +40,17 @@ function GameChat(props) {
     if(chatButtonContent === "Search") fetchGifs();
   }
 
+  function handleMobileButtonClick() {
+    gifSearch ? fetchGifs() : sendMessage("text")
+  }
+
   function handleGifSearchInputChange(e) {
     setGifSearchValue(e.target.value);
+  }
+
+  function hideChat() {
+    props.setChatVisible(false);
+    props.setNotification(false);
   }
 
   function fetchGifs() {
@@ -48,6 +58,7 @@ function GameChat(props) {
     fetch(url)
     .then(response => response.json())
     .then(content => {
+      console.log(content)
       setGifs(content.data);
     })
     .catch(err => {
@@ -70,6 +81,12 @@ function GameChat(props) {
   }
   
   function handlePostMessage(data) {
+    if(data.author !== props.playerNumber && data.author !== "server") {
+      console.log(props.chatVisible)
+      if(!props.chatVisible) {
+        props.setNotification(true);
+      }
+    }
     setSentMessages(prev => [...prev, data])
   }
 
@@ -97,10 +114,13 @@ function GameChat(props) {
     gifSearch ? fetchGifs() : sendMessage("text")
   }, ["Enter"])
 
+
   return (
-    <aside className="game-aside game-chat">
+    <aside className={`game-chat ${props.chatVisible ? "mobile-chat-open" : ""}`}>
     <div className="chat">
-        <span className="close-chat">back →</span>
+        <span onClick={hideChat} className="close-chat">
+          <img className="close-chat__icon" src="icons/plus_icon.png"></img>
+        </span>
         <div id="sent-messages" ref={chatRef}>
           {sentMessages.map( message => (
             <ChatMessage 
@@ -110,6 +130,7 @@ function GameChat(props) {
               playerNumber={props.playerNumber}
               messageType={message.messageType}
               still={message.gifStill}
+              chatVisible={props.chatVisible}
             />
            ))}
         </div>
@@ -133,8 +154,8 @@ function GameChat(props) {
         <input onChange={handleGifSearchInputChange} value={gifSearchValue} type="text" className={`gif-search-input ${gifSearch ? "show" : "hidden"}`} placeholder="Search gifs"></input>
         <input onChange={handleMessageInputChange} value={message} className={`compose-message ${gifSearch ? "hidden" : "show"}`} type="text" placeholder="Send message..." autoComplete="off"></input>
         <button onClick={handleButtonClick} id="send-message-btn" className="lobby-btn">{chatButtonContent}</button>
-        <button id="mobile-send-message-btn">
-            <img src="icons/send_icon.png" alt=""></img>
+        <button onClick={handleMobileButtonClick} id="mobile-send-message-btn">
+            <img src={`icons/${gifSearch ? "search" : "send"}_icon.png`} alt=""></img>
         </button>
     </div>
 </aside>

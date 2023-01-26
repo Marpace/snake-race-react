@@ -12,6 +12,8 @@ function SinglePlayer(props) {
   const [foodCount, setFoodCount] = useState(0);
   const [gamesPlayed, setGamesPlayed] = useState(0);
   const [snakeColor, setSnakeColor] = useState("rgb(136, 241, 210)")
+  const [settingsVisible, setSettingsVisible] = useState(false);
+  const [direction, setDirection] = useState(undefined)
 
   const descriptions = {
     "Classic": "Classic snake game rules: eat as many pieces of food as you can.",
@@ -22,10 +24,6 @@ function SinglePlayer(props) {
 
   function handleBackButton() {
     props.setGameMode("home");
-  }
-
-  function updateGameType(gameType) {
-    setGameType(gameType);
   }
 
   function updateGameSpeed(speed) {
@@ -52,22 +50,29 @@ function SinglePlayer(props) {
     setGameInProgress(false);
   };
 
+  function showSettings() {
+    setSettingsVisible(true);
+  }
+
   return (
-    <main>
-      <div className="header-container">
-      <button onClick={handleBackButton} className="lobby-btn">Back</button>
+    <main className="singleplayer-main">
+      <div className="header-container game-header-container">
+      <button onClick={handleBackButton} className="lobby-btn back-btn">Back</button>
         <h1 className="header">Snake Race</h1>
       </div>
   
       <div id="game-screen">
           <GameSettings
             startGame={startGame}
-            gameInProgress={gameInProgress}
-            updateGameType={updateGameType}
+            setGameType={setGameType}
             updateGameSpeed={updateGameSpeed}
             updateSnakeColor={updateSnakeColor}
+            setSettingsVisible={setSettingsVisible} 
+            settingsVisible={settingsVisible}
+            gameInProgress={gameInProgress}
             foodCount={foodCount}
             gamesPlayed={gamesPlayed}
+            gameType={gameType}
           />
       
           <div className="grid-container">
@@ -83,9 +88,10 @@ function SinglePlayer(props) {
               gameType={gameType}
               gameSpeed={gameSpeed}
               snakeColor={snakeColor}
+              direction={direction}
               />
               <div id="game-code-div">
-                  <div className="settings-icon"></div>
+                  <div onClick={showSettings} className="settings-icon"></div>
                   <div className="game-rules-container">
                     <p className="game-rules-hoverable">Game rules</p>
                     <div className="game-rules">
@@ -93,15 +99,16 @@ function SinglePlayer(props) {
                       <p className="game-rules__description">{descriptions[gameType]}</p>
                     </div>
                   </div>
-                  <p className="text-info">controls: ← ↑ → ↓</p>
+                  <p className="text-info controls-info">controls: ← ↑ → ↓</p>
               </div>
           </div>
   
-          <MobileControls/>
+          <MobileControls
+            setDirection={setDirection}
+          />
   
           {/* Only visible on screens 992 or smaller */}
-          <button id="mobile-start-game-btn" className="lobby-btn">Start game</button>
-          <button id="mobile-play-again-btn" className="lobby-btn">Play again</button>
+          <button onClick={startGame} className="mobile-start-game-btn lobby-btn">Start game</button>
   
       </div>
     </main>
