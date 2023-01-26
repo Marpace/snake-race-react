@@ -1,5 +1,6 @@
 {
   "name": "snake-race",
+  "homepage": "https://Marpace.github.io/snake-race-react",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
