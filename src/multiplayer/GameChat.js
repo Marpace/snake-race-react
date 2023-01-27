@@ -9,6 +9,7 @@ import useWindowDimensions from "../useWindowDimensions";
 function GameChat(props) {
 
   const {height, width} = useWindowDimensions();
+  
 
   const GIPHY_API_KEY = "XZ1XB9l5SzJmOWNCfvS7TiNhAz3fbG0q";
   const socket = useContext(SocketContext);
