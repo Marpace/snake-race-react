@@ -769,12 +769,7 @@ main {
     justify-content: center;
     flex-wrap: nowrap;
     width: 90%;
-    margin-bottom: 70px;
-  }
-}
-@media only screen and (max-width: 415px) {
-  .game-chat #send-message {
-    margin-bottom: 70px;
+    margin-bottom: 25px;
   }
 }
 .game-chat #send-message .gif-icon {
@@ -859,6 +854,10 @@ main {
     width: 100%;
     left: 0;
   }
+}
+
+.keyboard-open {
+  height: calc(100vh - 50px);
 }
 
 .mobile-controls {
@@ -1265,6 +1264,7 @@ main {
   border-radius: 5px;
   font-weight: 500;
   cursor: pointer;
+  user-select: none;
 }
 #game-screen .grid-container #game-code-div .game-rules-container .game-rules-hoverable:hover ~ .game-rules {
   opacity: 1;

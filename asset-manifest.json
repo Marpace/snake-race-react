@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/snake-race-react/static/js/main.f4c2daa7.js",
+    "main.js": "/snake-race-react/static/js/main.c17ae6dc.js",
     "index.html": "/snake-race-react/index.html",
-    "main.f4c2daa7.js.map": "/snake-race-react/static/js/main.f4c2daa7.js.map"
+    "main.c17ae6dc.js.map": "/snake-race-react/static/js/main.c17ae6dc.js.map"
   },
   "entrypoints": [
-    "static/js/main.f4c2daa7.js"
+    "static/js/main.c17ae6dc.js"
   ]
 }
