@@ -3,15 +3,17 @@ import {useContext, useEffect, useState, useRef} from "react";
 import useKeyDown from "../useKeyDown";
 import ChatMessage from "./ChatMesage";
 import GifImage from "./GifImage";
+import useWindowDimensions from "../useWindowDimensions";
 
 
 function GameChat(props) {
 
-  console.log(props.chatVisible)
+  const {height, width} = useWindowDimensions();
 
   const GIPHY_API_KEY = "XZ1XB9l5SzJmOWNCfvS7TiNhAz3fbG0q";
   const socket = useContext(SocketContext);
   const chatRef = useRef(null);
+  const inputRef = useRef(null);
 
   const [message, setMessage] = useState("");
   const [gifSearch, setGifSearch] = useState(false);
@@ -78,6 +80,7 @@ function GameChat(props) {
     setMessage("");
     setGifSearch(false)
     setIsTyping(false)
+    inputRef.current.focus();
   }
   
   function handlePostMessage(data) {
@@ -114,9 +117,10 @@ function GameChat(props) {
     gifSearch ? fetchGifs() : sendMessage("text")
   }, ["Enter"])
 
-
   return (
-    <aside className={`game-chat ${props.chatVisible ? "mobile-chat-open" : ""}`}>
+    <aside 
+    className={`game-chat ${props.chatVisible ? "mobile-chat-open" : ""}`}
+    style={{height: `${height}px`}}>
     <div className="chat">
         <span onClick={hideChat} className="close-chat">
           <img className="close-chat__icon" src="icons/plus_icon.png"></img>
@@ -152,7 +156,14 @@ function GameChat(props) {
     <div id="send-message">
         <button onClick={handleGifButton} className="gif-icon">GIF</button>
         <input onChange={handleGifSearchInputChange} value={gifSearchValue} type="text" className={`gif-search-input ${gifSearch ? "show" : "hidden"}`} placeholder="Search gifs"></input>
-        <input onChange={handleMessageInputChange} value={message} className={`compose-message ${gifSearch ? "hidden" : "show"}`} type="text" placeholder="Send message..." autoComplete="off"></input>
+        <input 
+          ref={inputRef}
+          onChange={handleMessageInputChange} 
+          value={message} 
+          className={`compose-message ${gifSearch ? "hidden" : "show"}`} 
+          type="text" 
+          placeholder="Send message..." 
+          autoComplete="off"></input>
         <button onClick={handleButtonClick} id="send-message-btn" className="lobby-btn">{chatButtonContent}</button>
         <button onClick={handleMobileButtonClick} id="mobile-send-message-btn">
             <img src={`icons/${gifSearch ? "search" : "send"}_icon.png`} alt=""></img>

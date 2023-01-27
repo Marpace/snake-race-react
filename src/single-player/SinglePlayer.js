@@ -19,7 +19,7 @@ function SinglePlayer(props) {
     "Classic": "Classic snake game rules: eat as many pieces of food as you can.",
     "Live bait": "Food pieces are harder to catch as they move.",
     "Pedal to the metal": "Speed setting is disabled but snake moves faster with every piece of food. How long can you last without crashing?",
-    "All you can eat": "You have 1 minute and 100 pieces of food. Eat as many pieces of food as possible without crashing."
+    "All you can eat": "You have 1 minute and 100 pieces of food. Eat as many pieces of food as you can without crashing."
   }
 
   function handleBackButton() {

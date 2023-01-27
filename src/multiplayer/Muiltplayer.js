@@ -24,9 +24,9 @@ function Multiplayer(props) {
   const socket = useContext(SocketContext);
 
   const descriptions = {
-    "Classic": "Classic snake game rules: set the speed and goal. First player to reach the goal without crashing, wins.",
+    "Classic": "Set the speed and goal. First player to reach the goal without crashing, wins.",
     "Live bait": "Food pieces are harder to catch as they move. First player to reach the goal without crashing, wins.",
-    "Pedal to the metal": "Speed and goal are disabled but snakes move faster with every piece of food. Eat more food than your oponent without crashing to win.",
+    "Pedal to the metal": "Speed and goal settings are disabled but snakes move faster with every piece of food. Eat more food than your oponent without crashing to win.",
     "All you can eat": "You have 1 minute and 100 pieces of food, eat more food than your openent without crashing to win."
   }
 

@@ -8,7 +8,7 @@ import {SocketContext, socket} from "./socketContext";
 
 function App() {
   
-  const [gameMode, setGameMode] = useState("home")
+  const [gameMode, setGameMode] = useState("multiplayer")
   const [nickname, setNickname] = useState("");
   const [playerOneName, setPlayerOneName] = useState("")
   const [playerTwoName, setPlayerTwoName] = useState("")

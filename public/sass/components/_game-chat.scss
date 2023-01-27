@@ -216,10 +216,7 @@
             justify-content: center;
             flex-wrap: nowrap;
             width: 90%;
-            margin-bottom: 70px;
-        }
-        @include responsive($mobile) {
-            margin-bottom: 70px;
+            margin-bottom: 25px;
         }
 
         .gif-icon {
@@ -296,4 +293,7 @@
         width: 100%;
         left: 0;
     }
+}
+.keyboard-open {
+    height: calc(100vh - 50px)
 }
