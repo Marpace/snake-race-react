@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/static/js/main.0baff4a8.js",
-    "index.html": "/index.html",
-    "main.0baff4a8.js.map": "/static/js/main.0baff4a8.js.map"
+    "main.js": "/snake-race-react/static/js/main.0baff4a8.js",
+    "index.html": "/snake-race-react/index.html",
+    "main.0baff4a8.js.map": "/snake-race-react/static/js/main.0baff4a8.js.map"
   },
   "entrypoints": [
     "static/js/main.0baff4a8.js"
